@@ -132,6 +132,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /******* Media Layer *******************************************************************************************************
  *
+<<<<<<< HEAD
  * ,---------------------------------------------------------------.    ,---------------------------------------------------------------.
  * |      |   F11   |   F12   |   F13   |   F14   |   F15   | Esc  |    | |||| |   F16   |   F17   |   F18   |   F19   |   F20   |      |
  * |------+---------+---------+---------+---------+----------------|    |------+---------+---------+---------+---------+---------+------|
@@ -141,7 +142,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+---------+---------+---------+---------+---------|Scroll|    |Scroll|---------+---------+---------+---------+---------+------|
  * |      |  ||||   |MouseDnLf|MouseDown|MouseDnRg|  Mute   | Down |    | Down |  ||||   |   End   |   Down  |   PgDn  |  ||||   |      |
  * `------+---------+---------+---------+---------+----------------'    `----------------+---------+---------+---------+---------+------'
- *  | ||| |  ||||   |  MClick | LClick  |  R Click|                                      |  Insert |   Del   |   ||||  |  ||||   | ||| |
+ *  | ||| |  ||||   |  MClick |  RClick |  LClick |                                      |  Insert |   Del   |   ||||  |  ||||   | ||| |
  *  `---------------------------------------------'                                      `---------------------------------------------'
  *                                                   ,-------------.    ,-------------.
  *                                                   | Stop |Refrsh|    | Prev | Next |
@@ -154,17 +155,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [MDIA] = LAYOUT_ergodox(
 // left hand
  KC_TRNS ,KC_F11   ,KC_F12  ,KC_F13   ,KC_F14  ,KC_F15  ,KC_ESC
-,KC_TRNS ,KC_POWER ,M(MUL)  ,KC_MS_U  ,M(MUR)  ,KC_VOLU ,KC_WH_U
-,KC_TRNS ,KC_SLEP  ,KC_MS_L ,KC_MS_D  ,KC_MS_R ,KC_VOLD
+,KC_TRNS ,KC_TRNS ,M(MUL)  ,KC_MS_U  ,M(MUR)  ,KC_VOLU ,KC_WH_U
+,KC_TRNS ,KC_TRNS  ,KC_MS_L ,KC_MS_D  ,KC_MS_R ,KC_VOLD
 ,KC_TRNS ,KC_NO    ,M(MDL)  ,KC_MS_D  ,M(MDR)  ,KC_MUTE ,KC_WH_D
-,KC_NO ,KC_NO   ,KC_BTN3 ,KC_BTN1  ,KC_BTN2
+,KC_NO ,KC_NO   ,KC_BTN3 ,KC_BTN2  ,KC_BTN1
                                                ,KC_WSTP ,KC_WREF
                                                         ,KC_WSCH
                                       ,KC_WBAK ,KC_NO   ,KC_WHOM
                                                                      // right hand
                                                                      ,KC_NO    ,KC_F16  ,KC_F17       ,KC_F18       ,KC_F19  ,KC_F20  ,KC_TRNS
-                                                                     ,KC_WH_U  ,KC_PSCR ,KC_HOME      ,KC_UP        ,KC_PGUP ,KC_MAIL ,KC_TRNS
-                                                                               ,KC_NLCK ,KC_LEFT      ,KC_DOWN      ,KC_RIGHT,KC_MYCM ,KC_TRNS
+                                                                     ,KC_WH_U  ,KC_TRNS ,KC_HOME      ,KC_UP        ,KC_PGUP ,KC_TRNS ,KC_TRNS
+                                                                               ,KC_LEFT ,KC_LEFT      ,KC_DOWN      ,KC_RIGHT,KC_RIGHT ,KC_TRNS
                                                                      ,KC_WH_D  ,KC_NO   ,KC_END       ,KC_DOWN      ,KC_PGDN ,KC_NO   ,KC_TRNS
                                                                                         ,KC_INS       ,KC_DEL       ,KC_NO   ,KC_NO   ,KC_NO
                                                                      ,KC_MPRV  ,KC_MNXT
