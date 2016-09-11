@@ -8,15 +8,12 @@
 #define BASE   0 // default layer
 #define SYMB   1 // symbols layer
 #define MDIA   2 // media layer
-#define SPEC   3 // special layer
-#define RBASE  4 // reverse default layer
+#define RBASE  3 // reverse default layer
 
 #define LSymb 10 // left symbol-shift key
 #define LMdia 11 // left media-shift key
-#define LSpec 12 // left special-shift key
 #define RSymb 13 // right symbol-shift key
 #define RMdia 14 // right media-shift key
-#define RSpec 15 // right special-shift key
 
 #define NotEq 16 // != macro
 #define GrtEq 17 // >= macro
@@ -172,48 +169,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                      ,KC_VOLD  ,KC_MSTP ,KC_MPLY
 ),
 
-/******* Special Layer *****************************************************************************************************
- *
- * ,-------------------------------------------------------.    ,-------------------------------------------------------.
- * |             |  Esc |      |      |      |      |      |    |      |      |      |      |   -  | Bspc |             |
- * |-------------+------+------+------+------+-------------|    |------+------+------+------+------+------+-------------|
- * | Media Lock  |      |      |      |      |      |      |    |      |      |      |      |  [   |   ]  | Media Lock  |
- * |-------------+------+------+------+------+------|      |    |      |------+------+------+------+------+-------------|
- * | Symbol Lock |      |      |      |      |      |------|    |------|      |      |      |      |      | Symbol Lock |
- * |-------------+------+------+------+------+------|      |    |      |------+------+------+------+------+-------------|
- * | Caps Lock   |      |      |      |      |      |      |    |      |      |      |      |      |      | Caps Lock   |
- * `-------------+------+------+------+------+-------------'    `-------------+------+------+------+------+-------------'
- *      |        |      |      |      |      |                                |      |      |      |      |        |
- *      `------------------------------------'                                `------------------------------------'
- *                                         ,-------------.     ,-------------.
- *                                         |      |      |     |      |      |
- *                                  ,------|------|------|     |------+------+------.
- *                                  |      |      |      |     |      |      |      |
- *                                  |      |      |------|     |------|      |      |
- *                                  |      |      |      |     |      |      |      |
- *                                  `--------------------'     `--------------------'
- */
-[SPEC] = LAYOUT_ergodox(
-// left hand
- KC_TRNS ,KC_ESC  ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS
-,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS
-,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS
-,KC_CAPS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS
-,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS
-                                             ,KC_TRNS ,KC_TRNS
-                                                      ,KC_TRNS
-                                     ,KC_TRNS,KC_TRNS ,KC_TRNS
-                                                             // right hand
-                                                             ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_MINS ,KC_BSPC ,KC_TRNS
-                                                             ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_LBRC ,KC_RBRC ,KC_TRNS
-                                                                      ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS
-                                                             ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_CAPS
-                                                                               ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS
-                                                             ,KC_TRNS ,KC_TRNS
-                                                             ,KC_TRNS
-                                                             ,KC_TRNS ,KC_TRNS ,KC_TRNS
-),
-
 /******* Reverse Base Layer *********************************************************************************************
  *
  * ,------------------------------------------------------.       ,------------------------------------------------------.
@@ -261,18 +216,13 @@ const uint16_t PROGMEM fn_actions[] = {
      // the faux shift keys are implemented as macro taps
      [LSymb] = ACTION_MACRO_TAP(LSymb)
     ,[LMdia] = ACTION_MACRO_TAP(LMdia)
-    ,[LSpec] = ACTION_MACRO_TAP(LSpec)
     ,[RSymb] = ACTION_MACRO_TAP(RSymb)
     ,[RMdia] = ACTION_MACRO_TAP(RMdia)
-    ,[RSpec] = ACTION_MACRO_TAP(RSpec)
 };
 
 uint16_t symb_shift = 0;
 uint16_t mdia_shift = 0;
 uint16_t spec_shift = 0;
-
-bool mdia_lock = false;
-bool symb_lock = false;
 
 const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
 {
@@ -282,110 +232,49 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
         // only because sometimes rapid pressing led to irregular events; this way the states
         // are self healing during use.
 
-        case LSymb:                                               //
+        case LSymb:
+        case RSymb:
         if (record->event.pressed) {                              // when the LSymb button is pressed
             if(++symb_shift > 2) symb_shift = 2;                  // increment the symb shift count, max two
-            if(spec_shift) symb_lock = !symb_lock;                // if the Special layer is on, toggle the shift lock
             layer_on(SYMB);                                       // in any case, turn on the Symbols layer
         } else {                                                  // when the LSymb button is released
             if(--symb_shift < 0) symb_shift = 0;                  // decrement the shift count, minimum zero
-            if((!symb_shift) && (!symb_lock)) layer_off(SYMB);    // if both shifts are released and the lock is off, turn off the Symbols layer
+            if(!symb_shift) layer_off(SYMB);                    // if shifts are released, turn off the Symbols layer
         }
         break;
 
         case LMdia:
         if (record->event.pressed) {
-           if (record->tap.count && (!mdia_shift) && (!mdia_lock) && (!spec_shift)) {
+           if (record->tap.count && (!mdia_shift) && (!spec_shift)) {
                 register_code(KC_TAB);
             } else {
-                if(spec_shift) mdia_lock = !mdia_lock;
                 if(++mdia_shift > 2) mdia_shift = 2;
-                layer_on(MDIA);
+                if(!mdia_shift) layer_on(MDIA);
             }
         } else {
-            if(record->tap.count && (!mdia_shift) && (!mdia_lock) && (!spec_shift)) {
+            if(record->tap.count && (!mdia_shift) && (!spec_shift)) {
                 unregister_code(KC_TAB);
             } else {
                 if(--mdia_shift < 0) mdia_shift = 0;
-                if((!mdia_shift) && (!mdia_lock)) layer_off(MDIA);
-            }
-        }
-        break;
-
-        case LSpec:
-        if (record->event.pressed) {                                     // when the LSpec button is pressed
-            if(symb_shift) symb_lock = !symb_lock;                       // if another layer button is engaged, then
-            else if(mdia_shift) mdia_lock = !mdia_lock;                  // lock that layer, be it caps or symb or mdia
-            else if (record->tap.count && !record->tap.interrupted && (!spec_shift)) {
-                register_code(KC_GRV);                                   // otherwise, if it's an uninterrupted tap, emit a char
-            } else {
-                if(++spec_shift > 2) spec_shift = 2;
-                layer_on(SPEC);                                          // otherwise, turn on the Special layer
-            }
-        } else {
-            if(record->tap.count && !record->tap.interrupted && (!spec_shift)) {
-                unregister_code(KC_GRV);
-            } else {
-                if(--spec_shift < 0) spec_shift = 0;
-                if(!spec_shift) layer_off(SPEC);
-            }
-        }
-        break;
-
-        case RSymb:
-        if (record->event.pressed) {
-            if (record->tap.count && (!symb_shift) && (!symb_lock) && (!spec_shift)) {
-                register_code(KC_QUOT);
-            } else {
-                if(++symb_shift > 2) symb_shift = 2;
-                if(spec_shift) symb_lock = !symb_lock;
-                layer_on(SYMB);
-            }
-        } else {
-            if(record->tap.count && (!symb_shift) && (!symb_lock) && (!spec_shift)) {
-                unregister_code(KC_QUOT);
-            } else {
-                if(--symb_shift < 0) symb_shift = 0;
-                if((!symb_shift) && (!symb_lock)) layer_off(SYMB);
+                if(!mdia_shift) layer_off(MDIA);
             }
         }
         break;
 
         case RMdia:
         if (record->event.pressed) {
-            if (record->tap.count && (!mdia_shift) && (!mdia_lock) && (!spec_shift)) {
+            if (record->tap.count && (!mdia_shift) && (!spec_shift)) {
                 register_code(KC_BSLS);
             } else {
                 if(++mdia_shift > 2) mdia_shift = 2;
-                if(spec_shift) mdia_lock = !mdia_lock;
                 layer_on(MDIA);
             }
         } else {
-            if(record->tap.count && (!mdia_shift) && (!mdia_lock) && (!spec_shift)) {
+            if(record->tap.count && (!mdia_shift) && (!spec_shift)) {
                 unregister_code(KC_BSLS);
             } else {
                 if(--mdia_shift < 0) mdia_shift = 0;
-                if((!mdia_shift) && (!mdia_lock)) layer_off(MDIA);
-            }
-        }
-        break;
-
-        case RSpec:
-        if (record->event.pressed) {
-            if(symb_shift) symb_lock = !symb_lock;
-            else if(mdia_shift) mdia_lock = !mdia_lock;
-            else if (record->tap.count && !record->tap.interrupted && (!spec_shift)) {
-                register_code(KC_EQL);
-            } else {
-                if(++spec_shift > 2) spec_shift = 2;
-                layer_on(SPEC);
-            }
-        } else {
-            if(record->tap.count && !record->tap.interrupted && (!spec_shift)) {
-                unregister_code(KC_EQL);
-            } else {
-                if(--spec_shift < 0) spec_shift = 0;
-                if(!spec_shift) layer_off(SPEC);
+                if(!mdia_shift) layer_off(MDIA);
             }
         }
         break;
