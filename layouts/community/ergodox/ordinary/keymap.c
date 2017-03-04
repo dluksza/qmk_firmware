@@ -8,12 +8,14 @@
 #define BASE   0 // default layer
 #define SYMB   1 // symbols layer
 #define MDIA   2 // media layer
-#define RBASE  3 // reverse default layer
+#define RTBASE  3 // reverse thumb sections on default layer
 
 #define LSymb 10 // left symbol-shift key
 #define LMdia 11 // left media-shift key
+#define LRev  12 // left reverse-shift key
 #define RSymb 13 // right symbol-shift key
 #define RMdia 14 // right media-shift key
+#define RRev  15 // right reverse-shift key
 
 #define NotEq 16 // != macro
 #define GrtEq 17 // >= macro
@@ -50,11 +52,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------------+------+------+------+------+-------------|           |------+------+------+------+------+------+------------|
  * | Media  Tab |   Q  |   W  |   E  |   R  |   T  |   [  |           |  ]   |   Y  |   U  |   I  |   O  |   P  | \|   Media |
  * |------------+------+------+------+------+------|      |           |      |------+------+------+------+------+------------|
- * | Symbol     |  ^A  |   S  |   D  |  ^F  |   G  |------|           |------|   H  |  ^J  |   K  |   L  |  ^;  | '"  Symbol |
+ * | Symbol     |   A  |   S  |   D  |   F  |   G  |------|           |------|   H  |   J  |   K  |   L  |   ;  | '"  Symbol |
  * |------------+------+------+------+------+------| Left |           | Right|------+------+------+------+------+------------|
  * | Capitals   |   Z  |   X  |   C  |   V  |   B  |      |           |      |   N  |   M  |   ,  |   .  |  /   |   Capitals |
  * `------------+------+------+------+------+-------------'           `-------------+------+------+------+------+------------'
- *      | LCtrl | Meh  |Hyper | LAlt | LGui |                                       | RGui | RAlt | Hyper|  Meh | RCtrl |
+ *      | LCtrl | Rev  |Hyper | LAlt | LGui |                                       | RGui | RAlt | Hyper| Rev  | RCtrl |
  *      `-----------------------------------'                                       `-----------------------------------'
  *                                          ,-------------.           ,-------------.
  *                                          | Home | End  |           | Left | Right|
@@ -66,20 +68,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [BASE] = LAYOUT_ergodox(
 // left hand
- KC_GRV    ,KC_1            ,KC_2   ,KC_3   ,KC_4            ,KC_5  ,KC_ESC
-,F(LMdia)  ,KC_Q            ,KC_W   ,KC_E   ,KC_R            ,KC_T  ,KC_LBRC
-,M(LSymb)  ,LT(RBASE, KC_A) ,KC_S   ,KC_D   ,LT(RBASE, KC_F) ,KC_G
-,KC_LSFT   ,KC_Z            ,KC_X   ,KC_C   ,KC_V            ,KC_B  ,KC_LEFT
-,KC_LCTL   ,KC_MEH          ,KC_HYPR,KC_LALT,KC_LGUI
+ KC_GRV    ,KC_1    ,KC_2   ,KC_3   ,KC_4 ,KC_5  ,KC_ESC
+,F(LMdia)  ,KC_Q    ,KC_W   ,KC_E   ,KC_R ,KC_T  ,KC_LBRC
+,M(LSymb)  ,KC_A    ,KC_S   ,KC_D   ,KC_F ,KC_G
+,KC_LSFT   ,KC_Z    ,KC_X   ,KC_C   ,KC_V ,KC_B  ,KC_LEFT
+,KC_LCTL   ,F(LRev) ,KC_HYPR,KC_LALT,KC_LGUI
                                          ,KC_HOME,KC_END
                                                  ,KC_PGUP
                                  ,KC_BSPC,KC_DEL ,KC_PGDN
                                                               // right hand
-                                                             ,KC_MINS ,KC_6   ,KC_7            ,KC_8   ,KC_9    ,KC_0               ,KC_EQL
-                                                             ,KC_RBRC ,KC_Y   ,KC_U            ,KC_I   ,KC_O    ,KC_P               ,F(RMdia)
-                                                                      ,KC_H   ,LT(RBASE, KC_J) ,KC_K   ,KC_L    ,LT(RBASE, KC_SCLN) ,F(RSymb)
-                                                             ,KC_RGHT ,KC_N   ,KC_M            ,KC_COMM,KC_DOT  ,KC_SLSH            ,KC_RSFT
-                                                                              ,KC_RGUI,KC_RALT,KC_HYPR ,KC_MEH   ,KC_RCTL
+                                                             ,KC_MINS ,KC_6   ,KC_7 ,KC_8   ,KC_9    ,KC_0      ,KC_EQL
+                                                             ,KC_RBRC ,KC_Y   ,KC_U ,KC_I   ,KC_O    ,KC_P      ,F(RMdia)
+                                                                      ,KC_H   ,KC_J ,KC_K   ,KC_L    ,KC_SCLN   ,F(RSymb)
+                                                             ,KC_RGHT ,KC_N   ,KC_M ,KC_COMM,KC_DOT  ,KC_SLSH   ,KC_RSFT
+                                                                              ,KC_RGUI,KC_RALT,KC_HYPR ,F(RRev) ,KC_RCTL
                                                              ,KC_LEFT ,KC_RGHT
                                                              ,KC_UP
                                                              ,KC_DOWN ,KC_ENT ,KC_SPC
@@ -172,15 +174,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /******* Reverse Base Layer *********************************************************************************************
  *
  * ,------------------------------------------------------.       ,------------------------------------------------------.
- * |    =+      |   0  |   9  |   8  |   7  |   6  |  -   |       |  Esc |   5  |   4  |   3  |   2  |   1  |    `~      |
+ * |            |      |      |      |      |      |      |       |      |      |      |      |      |      |            |
  * |------------+------+------+------+------+-------------|       |------+------+------+------+------+------+------------|
- * |    \|      |   P  |   O  |   I  |   U  |   Y  |   ]  |       |  [   |   T  |   R  |   E  |   W  |   Q  |    Tab     |
+ * |            |      |      |      |      |      |      |       |      |      |      |      |      |      |            |
  * |------------+------+------+------+------+------|      |       |      |------+------+------+------+------+------------|
- * |    '"      |   ;  |   L  |   K  |   J  |   H  |------|       |------|   G  |   F  |   D  |   S  |  A   |            |
- * |------------+------+------+------+------+------| Tab  |       |Shift |------+------+------+------+------+------------|
- * | Capitals   |   /  |   .  |   ,  |   M  |   N  |      |       | -Tab |   B  |   V  |   C  |   X  |  Z   |   Capitals |
+ * |            |      |      |      |      |      |------|       |------|      |      |      |      |      |            |
+ * |------------+------+------+------+------+------|      |       |      |------+------+------+------+------+------------|
+ * |            |      |      |      |      |  	   |      |       |      |      |      |      |      |      |            |
  * `------------+------+------+------+------+-------------'       `-------------+------+------+------+------+------------'
- *      | LCtrl | Meh  |Hyper | LAlt | LGui |                                   | RGui | RAlt | Hyper|  Meh | RCtrl |
+ *      |       |      |      |      |      |                                   |      |      |      |      |       |
  *      `-----------------------------------'                                   `-----------------------------------'
  *                                         ,-------------.       ,-------------.
  *                                         | Left | Right|       | Home | End  |
@@ -190,22 +192,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                                  |      |      | Down |       | PgDn |      |      |
  *                                  `--------------------'       `--------------------'
  */
-[RBASE] = LAYOUT_ergodox(
+[RTBASE] = LAYOUT_ergodox(
 // left hand
- KC_EQL    ,KC_0        ,KC_9   ,KC_8   ,KC_7  ,KC_6  ,KC_MINS
-,KC_BSLS   ,KC_P        ,KC_O   ,KC_I   ,KC_U  ,KC_Y  ,KC_RBRC
-,KC_QUOT     ,LT(RBASE, KC_SCLN)     ,KC_L   ,KC_K   ,LT(RBASE, KC_J)  ,KC_H
-,KC_RSFT   ,KC_SLSH     ,KC_DOT ,KC_COMM,KC_M  ,KC_N  ,KC_TAB
-,KC_RCTL   ,MEH_T(KC_NO),ALL_T(KC_NO),KC_RALT,KC_RGUI
+ KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS
+,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS
+,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS
+,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS
+,KC_TRNS ,KC_TRNS, KC_TRNS ,KC_TRNS ,KC_TRNS
                                              ,KC_LEFT ,KC_RGHT
                                                       ,KC_UP
                                     ,KC_SPC  ,KC_ENT  ,KC_DOWN
                                                                   // right hand
-                                                                 ,KC_ESC      ,KC_5   ,KC_4   ,KC_3   ,KC_2    ,KC_1  ,KC_GRV
-                                                                 ,KC_LBRC     ,KC_T   ,KC_R   ,KC_E   ,KC_W    ,KC_Q  ,KC_TAB
-                                                                              ,KC_G   ,LT(RBASE, KC_F),KC_D   ,KC_S   ,LT(RBASE, KC_A)  ,KC_NO
-                                                                 ,LSFT(KC_TAB),KC_B   ,KC_V   ,KC_C   ,KC_X    ,KC_Z  ,KC_LSFT
-                                                                                      ,KC_LGUI,KC_LALT,KC_HYPR ,KC_MEH,KC_LCTL
+                                                                 ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS
+                                                                 ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS
+                                                                          ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS
+                                                                 ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS
+                                                                                   ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS, KC_TRNS
                                                                  ,KC_HOME     ,KC_END
                                                                  ,KC_PGUP
                                                                  ,KC_PGDN     ,KC_BSPC ,KC_DEL
@@ -216,12 +218,15 @@ const uint16_t PROGMEM fn_actions[] = {
      // the faux shift keys are implemented as macro taps
      [LSymb] = ACTION_MACRO_TAP(LSymb)
     ,[LMdia] = ACTION_MACRO_TAP(LMdia)
+    ,[LRev]  = ACTION_MACRO_TAP(LRev)
     ,[RSymb] = ACTION_MACRO_TAP(RSymb)
     ,[RMdia] = ACTION_MACRO_TAP(RMdia)
+    ,[RRev]  = ACTION_MACRO_TAP(RRev)
 };
 
 uint16_t symb_shift = 0;
 uint16_t mdia_shift = 0;
+uint16_t rev_shift  = 0;
 uint16_t spec_shift = 0;
 
 const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
@@ -239,43 +244,45 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
             layer_on(SYMB);                                       // in any case, turn on the Symbols layer
         } else {                                                  // when the LSymb button is released
             if(--symb_shift < 0) symb_shift = 0;                  // decrement the shift count, minimum zero
-            if(!symb_shift) layer_off(SYMB);                    // if shifts are released, turn off the Symbols layer
+            if(!symb_shift) layer_off(SYMB);                      // if shifts are released, turn off the Symbols layer
         }
         break;
 
         case LMdia:
-        if (record->event.pressed) {
-           if (record->tap.count && (!mdia_shift) && (!spec_shift)) {
-                register_code(KC_TAB);
-            } else {
-                if(++mdia_shift > 2) mdia_shift = 2;
-                if(!mdia_shift) layer_on(MDIA);
-            }
-        } else {
-            if(record->tap.count && (!mdia_shift) && (!spec_shift)) {
-                unregister_code(KC_TAB);
-            } else {
-                if(--mdia_shift < 0) mdia_shift = 0;
-                if(!mdia_shift) layer_off(MDIA);
-            }
-        }
-        break;
-
         case RMdia:
         if (record->event.pressed) {
-            if (record->tap.count && (!mdia_shift) && (!spec_shift)) {
-                register_code(KC_BSLS);
+           if (record->tap.count && (!mdia_shift) && (!spec_shift)) {
+                if (id == LMdia) {
+                     register_code(KC_TAB);
+                } else {
+                     register_code(KC_BSLS);
+                }
             } else {
                 if(++mdia_shift > 2) mdia_shift = 2;
                 layer_on(MDIA);
             }
         } else {
-            if(record->tap.count && (!mdia_shift) && (!spec_shift)) {
-                unregister_code(KC_BSLS);
+            if (record->tap.count && (!mdia_shift) && (!spec_shift)) {
+                if (id == LMdia) {
+                    unregister_code(KC_TAB);
+                } else {
+                    unregister_code(KC_BSLS);
+                }
             } else {
                 if(--mdia_shift < 0) mdia_shift = 0;
                 if(!mdia_shift) layer_off(MDIA);
             }
+        }
+        break;
+
+        case LRev:
+	case RRev:
+        if (record->event.pressed) {
+            if(++rev_shift > 2) rev_shift = 2;
+            layer_on(RTBASE);
+        } else {
+            if(--rev_shift < 0) rev_shift = 0;
+            layer_off(RTBASE);
         }
         break;
 
