@@ -227,7 +227,6 @@ const uint16_t PROGMEM fn_actions[] = {
 uint16_t symb_shift = 0;
 uint16_t mdia_shift = 0;
 uint16_t rev_shift  = 0;
-uint16_t spec_shift = 0;
 
 const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
 {
@@ -251,7 +250,7 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
         case LMdia:
         case RMdia:
         if (record->event.pressed) {
-           if (record->tap.count && (!mdia_shift) && (!spec_shift)) {
+           if (record->tap.count && (!mdia_shift)) {
                 if (id == LMdia) {
                      register_code(KC_TAB);
                 } else {
@@ -262,7 +261,7 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
                 layer_on(MDIA);
             }
         } else {
-            if (record->tap.count && (!mdia_shift) && (!spec_shift)) {
+            if (record->tap.count && (!mdia_shift)) {
                 if (id == LMdia) {
                     unregister_code(KC_TAB);
                 } else {
