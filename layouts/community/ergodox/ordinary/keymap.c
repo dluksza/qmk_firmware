@@ -239,11 +239,19 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
         case LSymb:
         case RSymb:
         if (record->event.pressed) {                              // when the LSymb button is pressed
-            if(++symb_shift > 2) symb_shift = 2;                  // increment the symb shift count, max two
-            layer_on(SYMB);                                       // in any case, turn on the Symbols layer
+            if (record->tap.count && (!symb_shift) && id == RSymb) {
+                register_code(KC_QUOT);
+            } else {
+                if(++symb_shift > 2) symb_shift = 2;                  // increment the symb shift count, max two
+                layer_on(SYMB);                                       // in any case, turn on the Symbols layer
+            }
         } else {                                                  // when the LSymb button is released
-            if(--symb_shift < 0) symb_shift = 0;                  // decrement the shift count, minimum zero
-            if(!symb_shift) layer_off(SYMB);                      // if shifts are released, turn off the Symbols layer
+            if (record->tap.count && (!symb_shift) && id == RSymb) {
+                unregister_code(KC_QUOT);
+            } else {
+                if(--symb_shift < 0) symb_shift = 0;                  // decrement the shift count, minimum zero
+                if(!symb_shift) layer_off(SYMB);                      // if shifts are released, turn off the Symbols layer
+            }
         }
         break;
 
