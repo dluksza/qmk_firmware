@@ -405,19 +405,31 @@ void matrix_scan_user(void) {
        || (keyboard_report->mods & MOD_BIT(KC_RSFT))
        || (host_keyboard_leds() & (1<<USB_LED_CAPS_LOCK))) {
         ergodox_right_led_1_on();
+        return;
     } else {
         ergodox_right_led_1_off();
     }
 
+    // Reverse layer turns red and blue led
+    if (layer_state & (1UL<<RTBASE)) {
+        ergodox_right_led_1_on();
+        ergodox_right_led_3_on();
+        return;
+    } else {
+        ergodox_right_led_1_off();
+        ergodox_right_led_3_off();
+    }
+
     // Symbol layer turns on green light
-    if(layer_state & (1UL<<SYMB)) {
+    if (layer_state & (1UL<<SYMB)) {
         ergodox_right_led_2_on();
+        return;
     } else {
         ergodox_right_led_2_off();
     }
 
     // Media layer turns on blue light
-    if(layer_state & (1UL<<MDIA)) {
+    if (layer_state & (1UL<<MDIA)) {
         ergodox_right_led_3_on();
     } else {
         ergodox_right_led_3_off();
