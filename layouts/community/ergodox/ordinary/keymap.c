@@ -242,15 +242,21 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
             if (record->tap.count && (!symb_shift) && id == RSymb) {
                 register_code(KC_QUOT);
             } else {
-                if(++symb_shift > 2) symb_shift = 2;                  // increment the symb shift count, max two
+                if (++symb_shift > 2) {
+                    symb_shift = 2;                  // increment the symb shift count, max two
+                }
                 layer_on(SYMB);                                       // in any case, turn on the Symbols layer
             }
         } else {                                                  // when the LSymb button is released
             if (record->tap.count && (!symb_shift) && id == RSymb) {
                 unregister_code(KC_QUOT);
             } else {
-                if(--symb_shift < 0) symb_shift = 0;                  // decrement the shift count, minimum zero
-                if(!symb_shift) layer_off(SYMB);                      // if shifts are released, turn off the Symbols layer
+                if (--symb_shift < 0) {
+                    symb_shift = 0;                  // decrement the shift count, minimum zero
+                }
+                if (!symb_shift) {
+                    layer_off(SYMB);                      // if shifts are released, turn off the Symbols layer
+                }
             }
         }
         break;
@@ -265,7 +271,9 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
                      register_code(KC_BSLS);
                 }
             } else {
-                if(++mdia_shift > 2) mdia_shift = 2;
+                if (++mdia_shift > 2) {
+                    mdia_shift = 2;
+                }
                 layer_on(MDIA);
             }
         } else {
@@ -276,8 +284,12 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
                     unregister_code(KC_BSLS);
                 }
             } else {
-                if(--mdia_shift < 0) mdia_shift = 0;
-                if(!mdia_shift) layer_off(MDIA);
+                if (--mdia_shift < 0) {
+                    mdia_shift = 0;
+                }
+                if (!mdia_shift) {
+                    layer_off(MDIA);
+                }
             }
         }
         break;
@@ -285,11 +297,17 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
         case LRev:
 	case RRev:
         if (record->event.pressed) {
-            if(++rev_shift > 2) rev_shift = 2;
+            if (++rev_shift > 2) {
+                rev_shift = 2;
+            }
             layer_on(RTBASE);
-        } else {
-            if(--rev_shift < 0) rev_shift = 0;
-            layer_off(RTBASE);
+        } else { 
+            if (--rev_shift < 0) {
+              rev_shift = 0;
+            }
+            if (!rev_shift) {
+                layer_off(RTBASE);
+            }
         }
         break;
 
@@ -384,8 +402,8 @@ void matrix_init_user(void) {
 void matrix_scan_user(void) {
     // shift or caps lock turns on red light
     if((keyboard_report->mods & MOD_BIT(KC_LSFT))
-    || (keyboard_report->mods & MOD_BIT(KC_RSFT))
-    || (host_keyboard_leds() & (1<<USB_LED_CAPS_LOCK))) {
+       || (keyboard_report->mods & MOD_BIT(KC_RSFT))
+       || (host_keyboard_leds() & (1<<USB_LED_CAPS_LOCK))) {
         ergodox_right_led_1_on();
     } else {
         ergodox_right_led_1_off();
