@@ -52,7 +52,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------------+------+------+------+------+-------------|           |------+------+------+------+------+------+------------|
  * | Media  Tab |   Q  |   W  |   E  |   R  |   T  |   [  |           |  ]   |   Y  |   U  |   I  |   O  |   P  | \|   Media |
  * |------------+------+------+------+------+------|      |           |      |------+------+------+------+------+------------|
- * | Symbol     |   A  |   S  |   D  |   F  |   G  |------|           |------|   H  |   J  |   K  |   L  |   ;  | '"  Symbol |
+ * | Symbol|ESC |   A  |   S  |   D  |   F  |   G  |------|           |------|   H  |   J  |   K  |   L  |   ;  | '"  Symbol |
  * |------------+------+------+------+------+------| Left |           | Right|------+------+------+------+------+------------|
  * | Capitals   |   Z  |   X  |   C  |   V  |   B  |      |           |      |   N  |   M  |   ,  |   .  |  /   |   Capitals |
  * `------------+------+------+------+------+-------------'           `-------------+------+------+------+------+------------'
@@ -70,7 +70,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // left hand
  KC_GRV    ,KC_1    ,KC_2   ,KC_3   ,KC_4 ,KC_5  ,KC_ESC
 ,F(LMdia)  ,KC_Q    ,KC_W   ,KC_E   ,KC_R ,KC_T  ,KC_LBRC
-,M(LSymb)  ,KC_A    ,KC_S   ,KC_D   ,KC_F ,KC_G
+,F(LSymb)  ,KC_A    ,KC_S   ,KC_D   ,KC_F ,KC_G
 ,KC_LSFT   ,KC_Z    ,KC_X   ,KC_C   ,KC_V ,KC_B  ,KC_LEFT
 ,KC_LCTL   ,F(LRev) ,KC_HYPR,KC_LALT,KC_LGUI
                                          ,KC_HOME,KC_END
@@ -239,8 +239,12 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
         case LSymb:
         case RSymb:
         if (record->event.pressed) {                              // when the LSymb button is pressed
-            if (record->tap.count && (!symb_shift) && id == RSymb) {
-                register_code(KC_QUOT);
+            if (record->tap.count && (!symb_shift)) {
+                if (id == RSymb) {
+                    register_code(KC_QUOT);
+                } else { // should be LSymb
+                    register_code(KC_ESC);
+                }
             } else {
                 if (++symb_shift > 2) {
                     symb_shift = 2;                  // increment the symb shift count, max two
@@ -248,8 +252,12 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
                 layer_on(SYMB);                                       // in any case, turn on the Symbols layer
             }
         } else {                                                  // when the LSymb button is released
-            if (record->tap.count && (!symb_shift) && id == RSymb) {
-                unregister_code(KC_QUOT);
+            if (record->tap.count && (!symb_shift)) {
+                if (id == RSymb) {
+                    unregister_code(KC_QUOT);
+                } else { // should be LSymb
+                    unregister_code(KC_ESC);
+                }
             } else {
                 if (--symb_shift < 0) {
                     symb_shift = 0;                  // decrement the shift count, minimum zero
@@ -301,7 +309,7 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
                 rev_shift = 2;
             }
             layer_on(RTBASE);
-        } else { 
+        } else {
             if (--rev_shift < 0) {
               rev_shift = 0;
             }
