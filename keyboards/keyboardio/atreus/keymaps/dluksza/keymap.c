@@ -9,6 +9,10 @@
 #define BRIDN KC_F14
 // Mac brightness down
 #define BRIUP KC_F15
+// Browser back
+#define BBACK LGUI(KC_LBRC)
+// Browser forward
+#define BFORW LGUI(KC_RBRC)
 // Previous tab
 #define TPREV SGUI(KC_LBRC)
 // Next tab
@@ -49,8 +53,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    *       voldn  super shift bksp prev_tab  || next_tab alt  space       prtsc scroll pause
    */
   [_LW] = LAYOUT( /* [> LOWER <] */
-    KC_INS,  KC_HOME, KC_UP,   KC_END,  KC_PGUP,                   KC_UP,   KC_F7,   KC_F8,   KC_F9,   KC_F10  ,
-    KC_DEL,  KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN,                   KC_DOWN, KC_F4,   KC_F5,   KC_F6,   KC_F11  ,
-    BRIDN,   KC_VOLU, BRIUP,   KC_NO,   RESET,   KC_WBAK, KC_WFWD, KC_NO,   KC_F1,   KC_F2,   KC_F3,   KC_F12  ,
-    KC_NO,   KC_VOLD, KC_LGUI, KC_LSFT, KC_BSPC, TPREV,   TNEXT,   KC_SPC,  KC_NO,   KC_PSCR, KC_SLCK, KC_PAUS )
+    KC_INS,  KC_HOME, KC_UP,   KC_END,  KC_PGUP,               KC_UP,   KC_F7,   KC_F8,   KC_F9,   KC_F10  ,
+    KC_DEL,  KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN,               KC_DOWN, KC_F4,   KC_F5,   KC_F6,   KC_F11  ,
+    BRIDN,   KC_VOLU, BRIUP,   KC_NO,   RESET,   BBACK, BFORW, KC_NO,   KC_F1,   KC_F2,   KC_F3,   KC_F12  ,
+    KC_NO,   KC_VOLD, KC_LGUI, KC_LSFT, KC_BSPC, TPREV, TNEXT, KC_SPC,  KC_NO,   KC_PSCR, KC_SLCK, KC_PAUS )
 };
